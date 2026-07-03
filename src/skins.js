@@ -70,6 +70,15 @@ window.SKINS = {
         type: "sprites",
         desc: "Halo · Master Chief body + the shared PNG sprite kit (_shared/sprites.css).",
     },
+    mirage: {
+        name: "Mirage",
+        css: "skins/mirage/skin.css",
+        root: "mirage",
+        width: 900,
+        height: 800,
+        type: "sprites",
+        desc: "Assassin's Creed Mirage body + the shared PNG sprite kit (_shared/sprites.css).",
+    },
 };
 
 // Loaded when ?skin= is missing or unknown.
