@@ -38,25 +38,40 @@
 .controller.odyssey .stick.right { left: 518px; top: 390px; }
 
 /*
- * Per-skin sprite alignment. The shared PNG sprites (ABXY, bumpers, triggers,
- * d-pad, view/menu) are full-canvas overlays authored in valhalla's body frame.
- * This body is framed slightly differently (a touch smaller vertically), so the
- * whole sprite layer needs a small affine remap — fitted (least squares) from
- * six well correspondences measured in both bodies (the two stick wells + the
- * four ABXY wells), mapping valhalla-frame coordinates onto this body's wells
- * (max residual ~7px). Each overlay is pinned at (0,0) with size 900×790, so
- * transform-origin:0 0 makes the scale pivot on the canvas origin, matching the
- * fit.
+ * Per-skin sprite alignment. The shared PNG sprites (bumpers, d-pad, view/menu)
+ * are full-canvas overlays authored in valhalla's body frame. This body is a
+ * touch smaller vertically, so those structural overlays get a small affine
+ * remap — fitted (least squares) from six well correspondences measured in both
+ * bodies. Each overlay is pinned at (0,0) with size 900×790, so
+ * transform-origin:0 0 makes the scale pivot on the canvas origin.
+ *
+ * NOTE: triggers are intentionally excluded — their ears were moved in body.png
+ * to valhalla's exact trigger position, so the shared trigger sprites already
+ * line up at identity (applying the affine would nudge them ~4px off).
  */
-.controller.odyssey .button,
 .controller.odyssey .bumper,
-.controller.odyssey .trigger,
 .controller.odyssey .face,
 .controller.odyssey .back,
 .controller.odyssey .start {
     transform-origin: 0 0;
     transform: translate(-4.51px, 1.95px) scale(1.00685, 0.91851);
 }
+
+/*
+ * ABXY are aligned EXACTLY, per button. A single shared affine left up to ~7px
+ * on individual face buttons (visible on the small colored discs even though the
+ * larger pressed glow hid it). Because each face button is its own full-canvas
+ * overlay, each instead gets the precise translate from its shared-sprite center
+ * to this body's measured well (offset = well − sprite center, in canvas px):
+ *   A well (687.6,370.3) − sprite (685.7,401.8) = (+1.9, −31.5)
+ *   B well (742.6,316.7) − sprite (746.2,341.3) = (−3.6, −24.6)
+ *   X well (632.0,312.9) − sprite (625.2,339.2) = (+6.8, −26.3)
+ *   Y well (687.4,257.8) − sprite (686.7,279.1) = (+0.7, −21.3)
+ */
+.controller.odyssey .button.a { transform: translate(1.9px, -31.5px); }
+.controller.odyssey .button.b { transform: translate(-3.6px, -24.6px); }
+.controller.odyssey .button.x { transform: translate(6.8px, -26.3px); }
+.controller.odyssey .button.y { transform: translate(0.7px, -21.3px); }
 
 /*
  * The guide (Xbox) button is a positioned glow, not a full-canvas sprite, so it
