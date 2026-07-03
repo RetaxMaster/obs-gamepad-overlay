@@ -79,6 +79,15 @@ window.SKINS = {
         type: "sprites",
         desc: "Assassin's Creed Mirage body + the shared PNG sprite kit (_shared/sprites.css).",
     },
+    odyssey: {
+        name: "Odyssey",
+        css: "skins/odyssey/skin.css",
+        root: "odyssey",
+        width: 900,
+        height: 800,
+        type: "sprites",
+        desc: "Assassin's Creed Odyssey body + the shared PNG sprite kit (_shared/sprites.css).",
+    },
 };
 
 // Loaded when ?skin= is missing or unknown.
