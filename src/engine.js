@@ -28,6 +28,9 @@
  *   ?bg=1          paint a dev checkerboard so you can see the transparent stage
  *   ?demo=1        drive a synthetic controller (no hardware needed) to preview
  *                  a skin — cycles buttons, pulses triggers, rotates sticks
+ *   ?demo=2        hold EVERY input at once (all buttons pressed, triggers full,
+ *                  sticks centered) — a static "all lit" frame for checking a
+ *                  skin's sprite alignment
  */
 
 (function () {
@@ -73,7 +76,7 @@
     var params = new URLSearchParams(window.location.search);
     var PLAYER = clamp(parseInt(params.get("p"), 10) || 0, 0, 3);
     var DEADZONE = clampFloat(parseFloat(params.get("deadzone")), 0, 0.9, 0.12);
-    var DEMO = params.get("demo") === "1";
+    var DEMO = clamp(parseInt(params.get("demo"), 10) || 0, 0, 2); // 0=off,1=cycle,2=all
     var frame = 0; // synthetic-time counter for demo mode
 
     if (params.get("bg") === "1") {
@@ -130,6 +133,13 @@
     // Lets you preview a skin (or drop it into OBS as a screensaver) without any
     // hardware. Deterministic — driven purely by the frame counter.
     function syntheticPad(f) {
+        // demo=2: hold everything at once — a static "all lit" alignment frame.
+        if (DEMO === 2) {
+            var all = [];
+            for (var k = 0; k < 17; k++) all.push({ pressed: true, value: 1 });
+            return { connected: true, buttons: all, axes: [0, 0, 0, 0] };
+        }
+
         var buttons = [];
         var lit = Math.floor(f / 32) % 17; // spotlight one digital input at a time
         for (var i = 0; i < 17; i++) {

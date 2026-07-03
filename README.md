@@ -11,7 +11,7 @@ gamepadviewer.com.
   decides *how it looks*. Switch skins with `?skin=<id>` or the visual picker.
 - **Four build styles, shared kits.** Pure CSS, image body + shared **CSS**
   controls, image body + shared **PNG sprite** controls, or a fully custom
-  skin — most only require drawing a body. Three ship in the repo; see
+  skin — most only require drawing a body. Four ship in the repo; see
   [Switching skins](#switching-skins).
 - **Local-only skins, too.** Add private, git-ignored skins (e.g. ones built on
   a streamer's art you can't redistribute) without touching the public repo —
@@ -45,6 +45,7 @@ Useful URL flags:
 | `?deadzone=` | Stick deadzone radius, `0`–`1` (default `0.12`).                    |
 | `?bg=1`      | Paint a checkerboard so you can see the transparent stage in a browser. |
 | `?demo=1`    | **No controller needed** — animate a fake pad to preview a skin.    |
+| `?demo=2`    | **No controller needed** — hold every input at once (an "all lit" frame for checking sprite alignment). |
 
 Preview a skin right now, no hardware:
 **http://localhost:5173/?skin=pure&demo=1&bg=1**
@@ -59,14 +60,15 @@ it hands you the overlay URL (e.g. `index.html?skin=pure`) to drop into OBS.
 > ⚠️ Put the **overlay** (`index.html?skin=…`) in OBS — **not** `selector.html`.
 > The selector is just a launcher.
 
-Skins are driven by the same engine. Three ship in this repo, one per build
-style:
+Skins are driven by the same engine. Four ship in this repo (two share the
+sprite style):
 
 | id           | Type    | What it is                                                       |
 |--------------|---------|------------------------------------------------------------------|
 | `pure`       | css     | Body + controls drawn 100% in CSS, no image files (900×640).     |
 | `hybrid-svg` | hybrid  | SVG body + the shared **CSS** control kit (900×640).             |
 | `valhalla`   | sprites | Custom body + the shared **PNG sprite** kit (900×800).           |
+| `silksong`   | sprites | Hollow Knight: Silksong body + the shared **PNG sprite** kit (900×800). |
 
 The registry lives in **`src/skins.js`** — add an entry and it appears in the
 selector automatically. Extra **local-only** skins (e.g. ones built on

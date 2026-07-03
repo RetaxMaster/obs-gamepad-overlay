@@ -52,6 +52,15 @@ window.SKINS = {
         type: "sprites",
         desc: "Custom body + the shared PNG sprite kit (_shared/sprites.css).",
     },
+    silksong: {
+        name: "Silksong",
+        css: "skins/silksong/skin.css",
+        root: "silksong",
+        width: 900,
+        height: 800,
+        type: "sprites",
+        desc: "Hollow Knight: Silksong body + the shared PNG sprite kit (_shared/sprites.css).",
+    },
 };
 
 // Loaded when ?skin= is missing or unknown.
