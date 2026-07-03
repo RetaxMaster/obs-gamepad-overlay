@@ -61,6 +61,15 @@ window.SKINS = {
         type: "sprites",
         desc: "Hollow Knight: Silksong body + the shared PNG sprite kit (_shared/sprites.css).",
     },
+    halo: {
+        name: "Halo",
+        css: "skins/halo/skin.css",
+        root: "halo",
+        width: 900,
+        height: 800,
+        type: "sprites",
+        desc: "Halo · Master Chief body + the shared PNG sprite kit (_shared/sprites.css).",
+    },
 };
 
 // Loaded when ?skin= is missing or unknown.
