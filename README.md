@@ -22,14 +22,19 @@ gamepadviewer.com.
 ## Quick start (local)
 
 The Gamepad API requires the page to be served over `http://` (not opened as a
-`file://`), so run any static server from the project root:
+`file://`), so run a static server from the project root:
 
 ```bash
-# Python (already on most machines)
+# Included Express server (recommended)
+npm install
+npm start                      # → http://localhost:3025
+
+# …or any static server, e.g. Python
 python3 -m http.server 5173
 ```
 
-Then open **http://localhost:5173/** and press any button on your controller.
+Then open **http://localhost:3025/** and press any button on your controller.
+(Examples below use port `5173`; adjust to whatever you run.)
 
 Useful URL flags:
 
@@ -82,6 +87,30 @@ touching the repo — see [Local-only skins](#local-only-skins-optional).
 
 > Tip: keep the static server running (or use OBS's *Local file* mode) so the
 > overlay is available whenever you stream.
+
+---
+
+## Production (Express + PM2)
+
+The repo ships a tiny Express server (`server.js`) and a PM2 config
+(`ecosystem.config.js`). **Local dev runs on `3025`; production on `3050`.**
+
+```bash
+npm install                       # first time only
+pm2 start ecosystem.config.js     # starts "gamepad-overlay" on port 3050
+pm2 save                          # remember it across restarts
+pm2 startup                       # (optional) run PM2 on server boot
+
+pm2 logs gamepad-overlay          # tail logs
+pm2 restart gamepad-overlay       # after a git pull
+```
+
+Then point OBS at `http://<your-server>:3050/?skin=<id>`. Put it behind a reverse
+proxy (nginx/Caddy) if you want a domain or HTTPS. Health check: `GET /healthz`.
+
+- Change the port without editing files: `PORT=8080 pm2 start ecosystem.config.js`.
+- `node_modules/` and `src/skins.local.js` stay out of git — run `npm install` on
+  the server, and only the repo's public skins ship.
 
 ---
 
