@@ -1,11 +1,10 @@
 .DS_Store
 node_modules/
+*.psd
 
-# Private / local-only skins built on third-party art (e.g. jayraydee's,
-# streaming-use license, not redistributable). Kept on disk locally, never
-# committed.
+# Private / local-only skin built on jayraydee's art (streaming-use license,
+# not redistributable). Kept on disk locally, never committed.
 skins/xbox-sx-black/
-skins/hybrid-sx/
 src/skins.local.js
 
 # Local-only tooling and notes for building private skins from third-party art.

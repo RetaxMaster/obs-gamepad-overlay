@@ -1,0 +1,23 @@
+/*
+ * valhalla/skin.css — "Valhalla" (custom body + shared PNG sprites)
+ *
+ * Category 3: a themed body image (art/body.png, made from my own Xbox
+ * controller) + the shared sprite control kit (_shared/sprites.css). All the
+ * art here is original, so this skin ships in the repo.
+ *
+ * Only the body lives here; the buttons/sticks/triggers come from the shared
+ * sprite set — swap the body to make another sprite-based skin.
+ */
+@import url("../_shared/sprites.css");
+
+.controller.valhalla::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 900px;
+    height: 790px;
+    background: url(art/body.png) 0 0 / 900px 790px no-repeat;
+    filter: drop-shadow(0 16px 26px rgba(0, 0, 0, 0.45));
+    z-index: 0;
+}

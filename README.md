@@ -9,9 +9,10 @@ gamepadviewer.com.
   Browser Source and you're done.
 - **Skin-agnostic engine.** The engine only reports *what you pressed*; a skin
   decides *how it looks*. Switch skins with `?skin=<id>` or the visual picker.
-- **Two skins included, one engine.** `pure` (drawn 100% in CSS) and `hybrid`
-  (an image body + shared CSS controls) — see [Switching skins](#switching-skins).
-  Build your own the same way.
+- **Four build styles, shared kits.** Pure CSS, image body + shared **CSS**
+  controls, image body + shared **PNG sprite** controls, or a fully custom
+  skin — most only require drawing a body. Three ship in the repo; see
+  [Switching skins](#switching-skins).
 - **Local-only skins, too.** Add private, git-ignored skins (e.g. ones built on
   a streamer's art you can't redistribute) without touching the public repo —
   see [Local-only skins](#local-only-skins-optional).
@@ -53,17 +54,19 @@ it hands you the overlay URL (e.g. `index.html?skin=pure`) to drop into OBS.
 > ⚠️ Put the **overlay** (`index.html?skin=…`) in OBS — **not** `selector.html`.
 > The selector is just a launcher.
 
-Skins are driven by the same engine. Two ship in this repo:
+Skins are driven by the same engine. Three ship in this repo, one per build
+style:
 
-| id       | Type   | What it is                                                     |
-|----------|--------|----------------------------------------------------------------|
-| `pure`   | CSS    | Drawn 100% in CSS — body via `clip-path`, no image files (900×640). |
-| `hybrid` | hybrid | An image body (one SVG) + shared CSS-drawn controls (900×640). |
+| id           | Type    | What it is                                                       |
+|--------------|---------|------------------------------------------------------------------|
+| `pure`       | css     | Body + controls drawn 100% in CSS, no image files (900×640).     |
+| `hybrid-svg` | hybrid  | SVG body + the shared **CSS** control kit (900×640).             |
+| `valhalla`   | sprites | Custom body + the shared **PNG sprite** kit (900×800).           |
 
 The registry lives in **`src/skins.js`** — add an entry and it appears in the
-selector automatically. Extra **local-only** skins (e.g. photorealistic ones
-built on third-party art) can be registered in a git-ignored `src/skins.local.js`
-without touching the repo — see [Local-only skins](#local-only-skins-optional).
+selector automatically. Extra **local-only** skins (e.g. ones built on
+third-party art) can be registered in a git-ignored `src/skins.local.js` without
+touching the repo — see [Local-only skins](#local-only-skins-optional).
 
 ---
 
@@ -73,7 +76,7 @@ without touching the repo — see [Local-only skins](#local-only-skins-optional)
 2. Point it at your local URL (e.g. `http://localhost:5173/`) — or check
    **Local file** and select `index.html`.
 3. Set the size to match your skin's canvas (shown in `selector.html`) — e.g.
-   **900×640** for `pure` / `hybrid`.
+   **900×640** for `pure` / `hybrid-svg`, **900×800** for `valhalla`.
 4. Leave the background transparent (the overlay already renders see-through).
 5. Press a button on your controller to wake the Gamepad API.
 
@@ -93,7 +96,9 @@ Three moving parts, cleanly separated:
 - **`src/skins.js` + `src/skin-loader.js`** — the registry and the loader that
   reads `?skin=<id>` and injects that skin's stylesheet + root classes.
 - **`skins/<name>/`** — the artwork. Reacts to the engine's signals; owns 100% of
-  the appearance. `skins/_shared/controls.css` is a reusable CSS control kit.
+  the appearance. Two reusable control kits let a skin supply *only its body*:
+  `skins/_shared/controls.css` (CSS-drawn controls) and `skins/_shared/sprites.css`
+  (PNG sprite controls, backed by `skins/_shared_sprites/`).
 
 ### The engine → skin contract
 
@@ -109,15 +114,21 @@ A skin never touches the Gamepad API — it just styles those three signals.
 
 ## Authoring a new skin
 
-Pick the flavor that fits, then register it:
+Pick the build style that fits, then register it. The first three usually mean
+you only draw/supply a **body** — the controls come from a shared kit:
 
-- **Pure CSS** — copy `skins/pure/`. Draw the body with CSS (`clip-path`,
-  gradients) and `@import` the shared controls. No image files, fully yours.
-- **Hybrid** — copy `skins/hybrid/`. Supply an image body (SVG/PNG) and reuse
-  the shared controls. *This is usually all you need — only the body changes.*
-- **Photo (sprites)** — full-canvas sprite layers swapped/revealed per state.
-  Best for photorealism; heaviest to build. Keep these local if the art isn't
-  yours to share (see below).
+1. **Pure CSS** (`type: css`) — copy `skins/pure/`. Draw the body with CSS
+   (`clip-path`, gradients) and `@import "../_shared/controls.css"`. No images.
+2. **Hybrid + CSS controls** (`type: hybrid`) — copy `skins/hybrid-svg/`. Supply
+   an image body (SVG/PNG) and `@import "../_shared/controls.css"`.
+3. **Hybrid + sprite controls** (`type: sprites`) — copy `skins/valhalla/`.
+   Supply an image body and `@import "../_shared/sprites.css"` (which draws the
+   shared PNG sprites from `skins/_shared_sprites/`). Best when you want
+   photoreal buttons and your body shares the standard Xbox well layout.
+4. **Full skin** (`type: full`) — own body *and* its own per-button sprites in a
+   local `art/` folder. Most control, heaviest to build; best for one-off
+   photoreal skins (see `skins/xbox-sx-black/`, kept local). Keep it local if the
+   art isn't yours to share.
 
 However you draw it, react to the same three signals:
 - `.pressed` → the "lit" look of each digital element,

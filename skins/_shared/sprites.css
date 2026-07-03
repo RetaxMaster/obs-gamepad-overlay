@@ -1,0 +1,116 @@
+/*
+ * _shared/sprites.css — reusable PNG sprite control kit.
+ *
+ * The sprite analog of controls.css. Layers a shared set of sprite overlays
+ * (in ../_shared_sprites/) on top of a skin's body: ABXY, sticks, triggers,
+ * bumpers, d-pad, view/menu — each a full-canvas overlay the engine toggles.
+ * A skin @imports this and supplies ONLY its body (the ::before layer).
+ *
+ * The sprites are framed for a standard Xbox Series X layout on a 900×800
+ * canvas (sprites are 900×790 pinned top-left; sticks are 100×100 in their
+ * wells), so any skin whose body shares that framing can reuse them.
+ *
+ * Engine → skin contract:
+ *   .pressed        → digital press (swap / reveal the "lit" sprite)
+ *   --value (0→1)   → analog trigger fill (drives overlay opacity)
+ *   --x / --y (−1→1) → analog stick offset (translate the thumbstick)
+ */
+
+.controller {
+    width: 900px;
+    height: 800px;
+}
+
+/* Every interactive layer sits above the body art. */
+.controller > *,
+.controller .dpad span {
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* ── Full-canvas sprite overlays ───────────────────────────────────────────── */
+.controller .button,
+.controller .bumper,
+.controller .trigger,
+.controller .face,
+.controller .back,
+.controller .start {
+    left: 0;
+    top: 0;
+    width: 900px;
+    height: 790px;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: 900px 790px;
+}
+
+/* ── Face buttons (A / B / X / Y) — always-lit letters, swap to glow ───────── */
+.controller .button.a { background-image: url(../_shared_sprites/a.png); }
+.controller .button.b { background-image: url(../_shared_sprites/b.png); }
+.controller .button.x { background-image: url(../_shared_sprites/x.png); }
+.controller .button.y { background-image: url(../_shared_sprites/y.png); }
+.controller .button.a.pressed { background-image: url(../_shared_sprites/a-press.png); }
+.controller .button.b.pressed { background-image: url(../_shared_sprites/b-press.png); }
+.controller .button.x.pressed { background-image: url(../_shared_sprites/x-press.png); }
+.controller .button.y.pressed { background-image: url(../_shared_sprites/y-press.png); }
+
+/* ── Bumpers (LB / RB) — hidden until pressed ──────────────────────────────── */
+.controller .bumper.left  { background-image: url(../_shared_sprites/lb.png); }
+.controller .bumper.right { background-image: url(../_shared_sprites/rb.png); }
+.controller .bumper { opacity: 0; transition: opacity 0.04s linear; }
+.controller .bumper.pressed { opacity: 1; }
+
+/* ── D-pad faces — glow overlays revealed on press ─────────────────────────── */
+.controller .dpad { position: static; }
+.controller .face.up    { background-image: url(../_shared_sprites/dpad-up.png); }
+.controller .face.down  { background-image: url(../_shared_sprites/dpad-down.png); }
+.controller .face.left  { background-image: url(../_shared_sprites/dpad-left.png); }
+.controller .face.right { background-image: url(../_shared_sprites/dpad-right.png); }
+.controller .face { opacity: 0; transition: opacity 0.04s linear; }
+.controller .face.pressed { opacity: 1; }
+
+/* ── View (back) & Menu (start) — glow overlays on press ───────────────────── */
+.controller .back  { background-image: url(../_shared_sprites/view-press.png); }
+.controller .start { background-image: url(../_shared_sprites/menu-press.png); }
+.controller .back,
+.controller .start { opacity: 0; transition: opacity 0.04s linear; }
+.controller .back.pressed,
+.controller .start.pressed { opacity: 1; }
+
+/* ── Triggers (LT / RT) — analog, opacity follows --value ──────────────────── */
+.controller .trigger.left  { background-image: url(../_shared_sprites/lt.png); }
+.controller .trigger.right { background-image: url(../_shared_sprites/rt.png); }
+.controller .trigger {
+    opacity: var(--value, 0);
+    transition: opacity 0.03s linear;
+}
+
+/* ── Analog sticks — positioned thumbsticks, moved by the engine ───────────── */
+.controller .stick {
+    width: 100px;
+    height: 100px;
+    margin: 0;
+    background: url(../_shared_sprites/stick.png) 0 0 / 100px 100px no-repeat;
+    transform: translate(calc(var(--x, 0) * 22px), calc(var(--y, 0) * 22px));
+    transition: transform 0.04s linear, filter 0.05s ease;
+}
+.controller .stick.left  { left: 170px; top: 284px; }
+.controller .stick.right { left: 519px; top: 419px; }
+.controller .stick.pressed {
+    filter: brightness(1.25) drop-shadow(0 0 8px rgba(255, 255, 255, 0.55));
+}
+
+/* ── Guide / Xbox button — lit in the base body; soft glow on press ────────── */
+.controller .meta {
+    left: 421px;
+    top: 188px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: transparent;
+    transition: box-shadow 0.06s ease;
+}
+.controller .meta.pressed {
+    box-shadow: 0 0 18px 4px rgba(255, 255, 255, 0.6);
+}

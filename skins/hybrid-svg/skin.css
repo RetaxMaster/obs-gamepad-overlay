@@ -1,21 +1,21 @@
 /*
- * hybrid/skin.css — "Slate · Hybrid"
+ * hybrid-svg/skin.css — "Slate · SVG body + shared CSS"
  *
- * The middle path: an IMAGE body (one SVG file) + the SAME CSS-drawn controls
- * as the Pure skin. This is usually all a new skin needs — the body is the hard
- * part to make look good, so you draw/photograph it once as an image, and let
- * shared CSS handle the buttons, sticks, and press states.
+ * Category 2: an IMAGE body (one SVG file) + the SAME CSS-drawn controls as the
+ * Pure skin. This is usually all a new skin needs — the body is the hard part to
+ * make look good, so you draw/photograph it once as an image, and let the shared
+ * CSS control kit handle the buttons, sticks, and press states.
  *
  * Compare this file to pure/skin.css: only the ::before body differs. Everything
  * below the body is inherited from ../_shared/controls.css.
  */
 @import url("../_shared/controls.css");
 
-.controller.hybrid {
+.controller.hybrid-svg {
     --glow: #ffb347; /* warm amber pressed glow */
 }
 
-.controller.hybrid::before {
+.controller.hybrid-svg::before {
     content: "";
     position: absolute;
     inset: 0;
