@@ -1,0 +1,98 @@
+/*
+ * base.css — layout & state, skin-agnostic.
+ *
+ * This file owns everything that is NOT artwork:
+ *   - a transparent, scroll-free stage (so OBS composites only the controller)
+ *   - centering the controller
+ *   - the connect / disconnect hint
+ *
+ * It must never reference a specific skin's colors or sprites.
+ */
+
+:root {
+    /* When true (via ?bg=1) we paint a checkerboard so you can see the overlay
+       while developing outside OBS. In OBS this stays transparent. */
+    --stage-bg: transparent;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--stage-bg);
+    /* OBS Browser Sources honor this: keeps the page background see-through. */
+    background-color: rgba(0, 0, 0, 0);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Dev-only visible backdrop: open index.html?bg=1 to see the transparent edges. */
+body.show-bg {
+    background:
+        repeating-conic-gradient(#2a2a2a 0% 25%, #202020 0% 50%) 50% / 40px 40px;
+}
+
+/* The stage centers the controller in the viewport. */
+body {
+    display: grid;
+    place-items: center;
+}
+
+/*
+ * The controller is a fixed-size positioning context. Every skin draws inside
+ * this box using absolute positioning, so the engine never needs to know the
+ * geometry — only the skin does.
+ */
+.controller {
+    position: relative;
+    /* Default canvas; a skin may override width/height to match its art. */
+    width: 900px;
+    height: 800px;
+    /* Scale to fit smaller viewports without touching skin coordinates. */
+    transform-origin: center center;
+}
+
+/* Interactive elements are absolutely placed by the skin. */
+.controller span,
+.controller .meta,
+.controller .connect-hint {
+    position: absolute;
+}
+
+/* ---- Connect / disconnect state ---- */
+
+.connect-hint {
+    inset: 0;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    color: #e8e8e8;
+    font-size: 22px;
+    letter-spacing: 0.3px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    z-index: 50;
+    pointer-events: none;
+}
+
+/* Hide the hint once connected. */
+.controller:not(.disconnected) .connect-hint {
+    display: none;
+}
+
+/* Dim the whole pad while waiting for a controller so the hint reads clearly. */
+.controller.disconnected {
+    opacity: 0.35;
+    transition: opacity 0.25s ease;
+}
+.controller:not(.disconnected) {
+    opacity: 1;
+    transition: opacity 0.25s ease;
+}

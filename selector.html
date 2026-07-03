@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Selector — Gamepad Overlay</title>
+
+    <!-- The registry is the single source of truth; the picker just renders it. -->
+    <script src="src/skins.js"></script>
+    <!-- Optional private skins (git-ignored). A 404 here is harmless. -->
+    <script src="src/skins.local.js" onerror="void 0"></script>
+
+    <style>
+        :root {
+            --bg: #16181c;
+            --card: #1f2228;
+            --card-2: #191c21;
+            --line: #2c3038;
+            --text: #e7eaee;
+            --muted: #9aa2ad;
+            --accent: #7fd0ff;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(120% 80% at 50% 0%, #202530 0%, var(--bg) 55%);
+            color: var(--text);
+            font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+            padding: 40px 24px 64px;
+        }
+        header { max-width: 1080px; margin: 0 auto 28px; }
+        h1 { margin: 0 0 6px; font-size: 26px; letter-spacing: 0.2px; }
+        header p { margin: 0; color: var(--muted); line-height: 1.5; }
+        header code {
+            background: #0d0f12; border: 1px solid var(--line);
+            padding: 1px 6px; border-radius: 5px; font-size: 0.9em; color: var(--accent);
+        }
+
+        .grid {
+            max-width: 1080px; margin: 0 auto;
+            display: grid; gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        }
+        .card {
+            background: linear-gradient(var(--card), var(--card-2));
+            border: 1px solid var(--line); border-radius: 14px;
+            overflow: hidden; display: flex; flex-direction: column;
+        }
+        /* Scaled live preview of the real overlay in demo mode. */
+        .preview {
+            position: relative; height: 240px; overflow: hidden;
+            background:
+                repeating-conic-gradient(#22262c 0% 25%, #1c2025 0% 50%) 50% / 26px 26px;
+            border-bottom: 1px solid var(--line);
+        }
+        .preview iframe {
+            position: absolute; top: 50%; left: 50%;
+            width: 900px; height: 800px; border: 0;
+            transform: translate(-50%, -50%) scale(0.30);
+        }
+        .body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+        .row { display: flex; align-items: center; gap: 8px; justify-content: space-between; }
+        .name { font-size: 17px; font-weight: 650; }
+        .badge {
+            font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+            padding: 3px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted);
+        }
+        .badge.photo  { color: #ffd27f; border-color: #5a4a2a; }
+        .badge.css    { color: #7fffd4; border-color: #2a5a4a; }
+        .badge.hybrid { color: #ffb347; border-color: #5a4630; }
+        .desc { color: var(--muted); font-size: 13.5px; line-height: 1.45; flex: 1; }
+        .dims { color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+        .actions { display: flex; gap: 8px; margin-top: 2px; }
+        a.btn, button.btn {
+            flex: 1; text-align: center; cursor: pointer;
+            font: 600 13.5px/1 system-ui, sans-serif;
+            padding: 10px 12px; border-radius: 9px; border: 1px solid var(--line);
+            background: #23272e; color: var(--text); text-decoration: none;
+            transition: background 0.12s ease, border-color 0.12s ease;
+        }
+        a.btn:hover, button.btn:hover { background: #2b3038; border-color: #3a404a; }
+        a.btn.primary { background: var(--accent); color: #08222e; border-color: transparent; }
+        a.btn.primary:hover { filter: brightness(1.06); }
+        button.btn.copied { color: #7fffd4; border-color: #2a5a4a; }
+
+        footer {
+            max-width: 1080px; margin: 34px auto 0; padding-top: 20px;
+            border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; line-height: 1.6;
+        }
+        footer a { color: var(--accent); }
+        .warn { color: #ffce88; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🎮 Skin Selector</h1>
+        <p>
+            Pick a skin, then use its <strong>Overlay URL</strong> as an OBS Browser
+            Source. This picker is just a launcher — <span class="warn">don't put
+            <em>this</em> page in OBS</span>; use the overlay it points to
+            (<code>index.html?skin=…</code>).
+        </p>
+    </header>
+
+    <div class="grid" id="grid"></div>
+
+    <footer id="footer"></footer>
+
+    <script>
+        (function () {
+            var grid = document.getElementById("grid");
+            var skins = window.SKINS || {};
+
+            Object.keys(skins).forEach(function (id) {
+                var s = skins[id];
+                var overlayUrl = new URL("index.html?skin=" + id, location.href).href;
+
+                var card = document.createElement("div");
+                card.className = "card";
+                card.innerHTML =
+                    '<div class="preview">' +
+                        '<iframe loading="lazy" scrolling="no" src="index.html?skin=' + id + '&demo=1"></iframe>' +
+                    '</div>' +
+                    '<div class="body">' +
+                        '<div class="row">' +
+                            '<span class="name">' + s.name + '</span>' +
+                            '<span class="badge ' + s.type + '">' + s.type + '</span>' +
+                        '</div>' +
+                        '<div class="desc">' + s.desc + '</div>' +
+                        '<div class="dims">Canvas ' + s.width + '×' + s.height + ' · id <code>' + id + '</code></div>' +
+                        '<div class="actions">' +
+                            '<a class="btn primary" href="index.html?skin=' + id + '">Open overlay</a>' +
+                            '<button class="btn" data-url="' + overlayUrl + '">Copy URL</button>' +
+                        '</div>' +
+                    '</div>';
+                grid.appendChild(card);
+            });
+
+            // Copy-to-clipboard for the OBS URL.
+            grid.addEventListener("click", function (e) {
+                var btn = e.target.closest("button.btn");
+                if (!btn) return;
+                var url = btn.getAttribute("data-url");
+                navigator.clipboard && navigator.clipboard.writeText(url);
+                var old = btn.textContent;
+                btn.textContent = "Copied ✓";
+                btn.classList.add("copied");
+                setTimeout(function () { btn.textContent = old; btn.classList.remove("copied"); }, 1400);
+            });
+
+            document.getElementById("footer").innerHTML =
+                'Add a skin by dropping an entry in <code>src/skins.js</code>. ' +
+                'Browse community skins to scrape or adapt: ' +
+                '<a href="https://lethalmaus.github.io/GamepadViewerSkins/" target="_blank" rel="noopener">LethalMaus gallery</a>, ' +
+                '<a href="https://github.com/frolovlife/gamepadviewer-skins" target="_blank" rel="noopener">frolovlife</a>, ' +
+                'and the official directory in the ' +
+                '<a href="https://gamepadviewer.com/" target="_blank" rel="noopener">GamepadViewer</a> Discord.';
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 640" width="900" height="640">
+  <defs>
+    <!-- Slate body, lit from the top. -->
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0"    stop-color="#333a42"/>
+      <stop offset="0.36" stop-color="#20252b"/>
+      <stop offset="0.74" stop-color="#131619"/>
+      <stop offset="1"    stop-color="#0b0d0f"/>
+    </linearGradient>
+    <radialGradient id="sheen" cx="0.5" cy="0.12" r="0.55">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.09"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grip" width="9" height="9" patternUnits="userSpaceOnUse">
+      <circle cx="2.2" cy="2.2" r="1.1" fill="#000000" opacity="0.26"/>
+      <circle cx="6.7" cy="6.7" r="1.1" fill="#ffffff" opacity="0.04"/>
+    </pattern>
+  </defs>
+
+  <path id="sil" d="M 450,152
+       C 505,144 560,142 600,142 C 640,142 672,144 695,152
+       C 728,166 754,196 766,236 C 776,272 782,300 784,332
+       C 786,360 784,384 776,410 C 764,450 744,492 706,524
+       C 676,550 640,556 610,540 C 588,528 570,504 552,476
+       C 528,442 496,428 462,426 C 458,426 454,426 450,426
+       C 446,426 442,426 438,426 C 404,428 372,442 348,476
+       C 330,504 312,528 290,540 C 260,556 224,550 194,524
+       C 156,492 136,450 124,410 C 116,384 114,360 116,332
+       C 118,300 124,272 134,236 C 146,196 172,166 205,152
+       C 228,144 260,142 300,142 C 340,142 395,144 450,152 Z"
+       fill="url(#body)" stroke="#000000" stroke-width="1.5"/>
+
+  <clipPath id="clip"><use href="#sil"/></clipPath>
+  <g clip-path="url(#clip)">
+    <ellipse cx="220" cy="470" rx="120" ry="120" fill="url(#grip)"/>
+    <ellipse cx="680" cy="470" rx="120" ry="120" fill="url(#grip)"/>
+  </g>
+
+  <use href="#sil" fill="url(#sheen)"/>
+</svg>

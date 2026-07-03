@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OBS Gamepad Overlay</title>
+
+    <!-- Base layout: transparent background, centering, connect/disconnect states. -->
+    <link rel="stylesheet" href="styles/base.css">
+
+    <!--
+        Skin selection is data-driven. `skins.js` is the registry; `skin-loader.js`
+        reads ?skin=<id> from the URL, injects that skin's stylesheet, and tags the
+        controller with the skin's root classes. Change skins by changing the URL
+        (e.g. index.html?skin=pure) — the markup below never changes.
+        Pick visually with selector.html.
+    -->
+    <script src="src/skins.js"></script>
+    <!-- Optional private skins (git-ignored). A 404 here is harmless. -->
+    <script src="src/skins.local.js" onerror="void 0"></script>
+    <script src="src/skin-loader.js"></script>
+</head>
+<body>
+    <!--
+        The controller markup is intentionally "dumb": just semantic elements the
+        engine can toggle and the skin can paint. No artwork lives here.
+
+        Root classes drive skin selection. A skin targets a root like
+        `.controller.xbox-sx.black`, so swapping skins == swapping the <link> above
+        plus these root classes.
+    -->
+    <div class="controller disconnected" id="gamepad" data-player="0">
+
+        <!-- Shown until a gamepad is connected. -->
+        <div class="connect-hint">
+            <p>Press any button on your controller…</p>
+        </div>
+
+        <!-- Analog triggers (LT / RT). The engine clips these from the top. -->
+        <div class="triggers">
+            <span class="trigger left"  data-input="trigger-left"></span>
+            <span class="trigger right" data-input="trigger-right"></span>
+        </div>
+
+        <!-- Bumpers (LB / RB). -->
+        <div class="bumpers">
+            <span class="bumper left"  data-input="bumper-left"></span>
+            <span class="bumper right" data-input="bumper-right"></span>
+        </div>
+
+        <!-- Guide / Xbox button. -->
+        <div class="meta" data-input="meta"></div>
+
+        <!-- View (back) and Menu (start). -->
+        <div class="arrows">
+            <span class="back"  data-input="back"></span>
+            <span class="start" data-input="start"></span>
+        </div>
+
+        <!-- Face buttons. -->
+        <div class="abxy">
+            <span class="button a" data-input="a"></span>
+            <span class="button b" data-input="b"></span>
+            <span class="button x" data-input="x"></span>
+            <span class="button y" data-input="y"></span>
+        </div>
+
+        <!-- Analog sticks. The engine offsets these by the axis values;
+             the `.pressed` class is added when L3 / R3 is clicked. -->
+        <div class="sticks">
+            <span class="stick left"  data-input="stick-left"></span>
+            <span class="stick right" data-input="stick-right"></span>
+        </div>
+
+        <!-- D-pad. -->
+        <div class="dpad">
+            <span class="face up"    data-input="dpad-up"></span>
+            <span class="face down"  data-input="dpad-down"></span>
+            <span class="face left"  data-input="dpad-left"></span>
+            <span class="face right" data-input="dpad-right"></span>
+        </div>
+    </div>
+
+    <script src="src/engine.js"></script>
+</body>
+</html>

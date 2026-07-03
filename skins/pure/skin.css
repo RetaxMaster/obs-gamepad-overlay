@@ -1,0 +1,28 @@
+/*
+ * pure/skin.css — "Graphite · Pure CSS"
+ *
+ * A 100% code-drawn skin: NO image files at all. It imports the shared control
+ * kit and draws the body itself with a CSS `clip-path` (the silhouette is a
+ * vector path written right here) filled with a gradient.
+ *
+ * This is the "everything is CSS" end of the spectrum — infinitely scalable,
+ * tiny, fully version-controlled, and entirely yours.
+ */
+@import url("../_shared/controls.css");
+
+.controller.pure {
+    --glow: #7fffd4; /* neon mint pressed glow */
+}
+
+.controller.pure::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(120% 60% at 50% 6%, rgba(255, 255, 255, 0.09), transparent 60%),
+        linear-gradient(#2c2f34 0%, #1a1c1f 32%, #101113 74%, #0a0b0c 100%);
+    /* Body silhouette, drawn purely in CSS (coordinates are px on the 900×640 box). */
+    clip-path: path('M 450,152 C 505,144 560,142 600,142 C 640,142 672,144 695,152 C 728,166 754,196 766,236 C 776,272 782,300 784,332 C 786,360 784,384 776,410 C 764,450 744,492 706,524 C 676,550 640,556 610,540 C 588,528 570,504 552,476 C 528,442 496,428 462,426 C 458,426 454,426 450,426 C 446,426 442,426 438,426 C 404,428 372,442 348,476 C 330,504 312,528 290,540 C 260,556 224,550 194,524 C 156,492 136,450 124,410 C 116,384 114,360 116,332 C 118,300 124,272 134,236 C 146,196 172,166 205,152 C 228,144 260,142 300,142 C 340,142 395,144 450,152 Z');
+    filter: drop-shadow(0 16px 26px rgba(0, 0, 0, 0.5));
+    z-index: 0;
+}

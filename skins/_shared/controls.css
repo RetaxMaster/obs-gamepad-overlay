@@ -1,0 +1,245 @@
+/*
+ * _shared/controls.css — CSS-drawn controller controls (no images).
+ *
+ * A reusable "control kit": buttons, sticks, d-pad, bumpers, triggers, guide,
+ * view/menu — all drawn with gradients and shadows, laid out for a standard
+ * Xbox-style controller on a 900×640 canvas. It reacts to the engine's signals
+ * (.pressed, --value, --x/--y) and draws NO body.
+ *
+ * A skin @imports this file and supplies ONLY the body (the ::before layer) —
+ * that's the whole idea behind "hybrid" and "pure CSS" skins: swap the body,
+ * keep the controls. Skins may retint the pressed glow via --glow.
+ *
+ * Because only one skin stylesheet is ever loaded at a time, these generic
+ * `.controller` selectors never collide with the photo skin's own rules.
+ */
+
+.controller {
+    width: 900px;
+    height: 640px;
+    --glow: #7fd0ff; /* default pressed-glow color; skins may override */
+}
+
+.controller > *,
+.controller .dpad span {
+    z-index: 2;
+}
+
+/* ── Face buttons (A / B / X / Y) ──────────────────────────────────────────── */
+.controller .button {
+    width: 54px;
+    height: 54px;
+    margin: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 30%, #3a3d42 0%, #17181b 70%, #101113 100%);
+    box-shadow:
+        inset 0 2px 3px rgba(255, 255, 255, 0.13),
+        inset 0 -4px 6px rgba(0, 0, 0, 0.6),
+        0 3px 6px rgba(0, 0, 0, 0.55);
+    display: grid;
+    place-items: center;
+    transition: transform 0.05s ease, box-shadow 0.05s ease, background 0.05s ease;
+}
+.controller .button::after {
+    content: attr(data-input);
+    text-transform: uppercase;
+    font: 800 23px/1 "Segoe UI", system-ui, sans-serif;
+    color: var(--accent);
+    opacity: 0.72;
+    transition: opacity 0.05s ease, text-shadow 0.05s ease;
+}
+.controller .button.a { --accent: #6cbf3f; }
+.controller .button.b { --accent: #e14a4a; }
+.controller .button.x { --accent: #3f7fe1; }
+.controller .button.y { --accent: #e8b93a; }
+
+.controller .button.y { left: 620px; top: 244px; }
+.controller .button.x { left: 576px; top: 288px; }
+.controller .button.b { left: 664px; top: 288px; }
+.controller .button.a { left: 620px; top: 332px; }
+
+.controller .button.pressed {
+    background: radial-gradient(circle at 38% 30%, #44484e 0%, #202226 70%);
+    box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.7), 0 0 20px var(--accent);
+    transform: translateY(1px) scale(0.95);
+}
+.controller .button.pressed::after {
+    opacity: 1;
+    text-shadow: 0 0 14px var(--accent);
+}
+
+/* ── Analog sticks ─────────────────────────────────────────────────────────── */
+.controller .stick {
+    width: 116px;
+    height: 116px;
+    margin: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 40%, #26282c 0%, #141518 55%, #0a0b0c 100%);
+    box-shadow:
+        inset 0 5px 11px rgba(0, 0, 0, 0.75),
+        inset 0 -3px 6px rgba(255, 255, 255, 0.05),
+        0 5px 11px rgba(0, 0, 0, 0.5);
+    transform: translate(calc(var(--x, 0) * 16px), calc(var(--y, 0) * 16px));
+    transition: transform 0.04s linear, box-shadow 0.06s ease;
+}
+.controller .stick::after {
+    content: "";
+    position: absolute;
+    inset: 19px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 36%, #34373c 0%, #17191c 72%);
+    box-shadow:
+        inset 0 2px 4px rgba(255, 255, 255, 0.13),
+        inset 0 -6px 12px rgba(0, 0, 0, 0.65),
+        0 0 0 5px rgba(0, 0, 0, 0.35);
+    transition: background 0.06s ease;
+}
+.controller .stick.left  { left: 214px; top: 214px; }
+.controller .stick.right { left: 474px; top: 336px; }
+.controller .stick.pressed {
+    box-shadow: inset 0 5px 11px rgba(0, 0, 0, 0.75), 0 0 20px var(--glow);
+}
+.controller .stick.pressed::after {
+    background: radial-gradient(circle at 50% 36%, #45484e 0%, #202327 72%);
+}
+
+/* ── D-pad ─────────────────────────────────────────────────────────────────── */
+.controller .dpad {
+    position: absolute;
+    left: 278px;
+    top: 348px;
+    width: 108px;
+    height: 108px;
+}
+.controller .dpad::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 42%, #202226 0%, #0b0c0d 82%);
+    box-shadow: inset 0 4px 9px rgba(0, 0, 0, 0.75);
+}
+.controller .face {
+    background: linear-gradient(#33363b, #191b1e);
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.14),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.5),
+        0 2px 4px rgba(0, 0, 0, 0.55);
+    transition: transform 0.05s ease, box-shadow 0.05s ease, background 0.05s ease;
+}
+.controller .face.up    { left: 38px; top: 8px;  width: 32px; height: 48px; border-radius: 8px 8px 3px 3px; }
+.controller .face.down  { left: 38px; top: 52px; width: 32px; height: 48px; border-radius: 3px 3px 8px 8px; }
+.controller .face.left  { left: 8px;  top: 38px; width: 48px; height: 32px; border-radius: 8px 3px 3px 8px; }
+.controller .face.right { left: 52px; top: 38px; width: 48px; height: 32px; border-radius: 3px 8px 8px 3px; }
+.controller .face.pressed {
+    background: linear-gradient(#4a4f56, #24272b);
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.7), 0 0 14px var(--glow);
+    transform: scale(0.93);
+}
+
+/* ── Bumpers (LB / RB) ─────────────────────────────────────────────────────── */
+.controller .bumper {
+    width: 150px;
+    height: 22px;
+    border-radius: 12px 12px 6px 6px;
+    background: linear-gradient(#31353a, #15171a);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.13), 0 3px 5px rgba(0, 0, 0, 0.5);
+    transition: transform 0.05s ease, box-shadow 0.05s ease, background 0.05s ease;
+}
+.controller .bumper.left  { left: 205px; top: 150px; }
+.controller .bumper.right { left: 545px; top: 150px; }
+.controller .bumper.pressed {
+    background: linear-gradient(#43474d, #202327);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6), 0 0 15px var(--glow);
+    transform: translateY(2px);
+}
+
+/* ── Triggers (LT / RT) — analog fill via --value ─────────────────────────── */
+.controller .trigger {
+    width: 104px;
+    height: 44px;
+    border-radius: 18px 18px 8px 8px;
+    overflow: hidden;
+    background: #141619;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.65), 0 3px 6px rgba(0, 0, 0, 0.5);
+}
+.controller .trigger.left  { left: 228px; top: 104px; }
+.controller .trigger.right { left: 568px; top: 104px; }
+.controller .trigger::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform-origin: bottom;
+    transform: scaleY(var(--value, 0));
+    background: linear-gradient(var(--glow), color-mix(in srgb, var(--glow) 55%, #10466a));
+    opacity: 0.92;
+    transition: transform 0.03s linear;
+}
+.controller .trigger::after {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font: 700 15px/1 "Segoe UI", system-ui, sans-serif;
+    color: #cfd6dd;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+.controller .trigger.left::after  { content: "LT"; }
+.controller .trigger.right::after { content: "RT"; }
+
+/* ── Guide button ──────────────────────────────────────────────────────────── */
+.controller .meta {
+    left: 430px;
+    top: 188px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 34%, #24272c 0%, #0d0e10 74%);
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.1), 0 3px 6px rgba(0, 0, 0, 0.5);
+    display: grid;
+    place-items: center;
+    transition: background 0.05s ease, box-shadow 0.05s ease;
+}
+.controller .meta::after {
+    content: "";
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    border: 2.5px solid #d3d8de;
+    opacity: 0.5;
+    box-shadow: 0 0 5px rgba(210, 220, 230, 0.35);
+    transition: opacity 0.05s ease, box-shadow 0.05s ease;
+}
+.controller .meta.pressed::after {
+    opacity: 1;
+    box-shadow: 0 0 14px var(--glow);
+}
+
+/* ── View (back) & Menu (start) ────────────────────────────────────────────── */
+.controller .back,
+.controller .start {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 34%, #2a2d32 0%, #111214 72%);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.1), 0 2px 4px rgba(0, 0, 0, 0.5);
+    display: grid;
+    place-items: center;
+    transition: transform 0.05s ease, box-shadow 0.05s ease, background 0.05s ease;
+}
+.controller .back::after,
+.controller .start::after {
+    font: 600 12px/1 system-ui, sans-serif;
+    color: #aeb4bb;
+    opacity: 0.85;
+}
+.controller .back::after  { content: "\29C9"; }
+.controller .start::after { content: "\2261"; }
+.controller .back  { left: 388px; top: 250px; }
+.controller .start { left: 488px; top: 250px; }
+.controller .back.pressed,
+.controller .start.pressed {
+    background: radial-gradient(circle at 50% 34%, #3a3e44 0%, #1a1c1f 72%);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6), 0 0 12px var(--glow);
+    transform: scale(0.9);
+}
