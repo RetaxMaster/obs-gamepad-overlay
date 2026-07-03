@@ -59,7 +59,7 @@
 /*
  * The guide (Xbox) button is a positioned glow, not a full-canvas sprite, so it
  * can't share the transform above (its box origin isn't the canvas origin).
- * Instead we drop its center through the same affine: valhalla center (450,217)
- * → (445,202), i.e. left/top of 416/173 for the 58px box.
+ * Instead it is placed on the guide button measured directly from body.png (the
+ * shared affine mispredicts it — the guide barely follows the body compression).
  */
-.controller.silksong .meta { left: 416px; top: 173px; }
+.controller.silksong .meta { left: 418px; top: 209px; }

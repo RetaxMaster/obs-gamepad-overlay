@@ -11,7 +11,7 @@ gamepadviewer.com.
   decides *how it looks*. Switch skins with `?skin=<id>` or the visual picker.
 - **Four build styles, shared kits.** Pure CSS, image body + shared **CSS**
   controls, image body + shared **PNG sprite** controls, or a fully custom
-  skin — most only require drawing a body. Seven ship in the repo; see
+  skin — most only require drawing a body. Nine ship in the repo; see
   [Switching skins](#switching-skins).
 - **Local-only skins, too.** Add private, git-ignored skins (e.g. ones built on
   a streamer's art you can't redistribute) without touching the public repo —
@@ -60,7 +60,7 @@ it hands you the overlay URL (e.g. `index.html?skin=pure`) to drop into OBS.
 > ⚠️ Put the **overlay** (`index.html?skin=…`) in OBS — **not** `selector.html`.
 > The selector is just a launcher.
 
-Skins are driven by the same engine. Seven ship in this repo (five share the
+Skins are driven by the same engine. Nine ship in this repo (seven share the
 sprite style):
 
 | id           | Type    | What it is                                                       |
@@ -72,6 +72,8 @@ sprite style):
 | `halo`       | sprites | Halo · Master Chief body + the shared **PNG sprite** kit (900×800). |
 | `mirage`     | sprites | Assassin's Creed Mirage body + the shared **PNG sprite** kit (900×800). |
 | `odyssey`    | sprites | Assassin's Creed Odyssey body + the shared **PNG sprite** kit (900×800). |
+| `black-ice`  | sprites | AC/DC Black Ice body + the shared **PNG sprite** kit (900×800). |
+| `72-seasons` | sprites | Metallica 72 Seasons body + the shared **PNG sprite** kit (900×800). |
 
 The registry lives in **`src/skins.js`** — add an entry and it appears in the
 selector automatically. Extra **local-only** skins (e.g. ones built on

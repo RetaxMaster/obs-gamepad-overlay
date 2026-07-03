@@ -50,12 +50,21 @@
  * line up at identity (applying the affine would nudge them ~4px off).
  */
 .controller.odyssey .bumper,
-.controller.odyssey .face,
-.controller.odyssey .back,
-.controller.odyssey .start {
+.controller.odyssey .face {
     transform-origin: 0 0;
     transform: translate(-4.51px, 1.95px) scale(1.00685, 0.91851);
 }
+
+/*
+ * View / Menu, like ABXY, are aligned exactly per button — the shared affine
+ * mispredicts small buttons far from the fit region. Each is its own overlay,
+ * so each gets the precise translate from its shared-sprite center to this
+ * body's measured (painted) button:
+ *   view (back)  well (381.9,314.6) − sprite (387.8,339.9) = (−5.9, −25.3)
+ *   menu (start) well (519.2,314.7) − sprite (519.5,339.2) = (−0.3, −24.5)
+ */
+.controller.odyssey .back  { transform: translate(-5.9px, -25.3px); }
+.controller.odyssey .start { transform: translate(-0.3px, -24.5px); }
 
 /*
  * ABXY are aligned EXACTLY, per button. A single shared affine left up to ~7px
@@ -76,7 +85,7 @@
 /*
  * The guide (Xbox) button is a positioned glow, not a full-canvas sprite, so it
  * can't share the transform above (its box origin isn't the canvas origin).
- * Instead we drop its center through the same affine: valhalla center (450,217)
- * → (449,201), i.e. left/top of 420/172 for the 58px box.
+ * Placed on the guide button measured directly from body.png (the shared affine
+ * mispredicts it — the guide barely follows the body compression).
  */
-.controller.odyssey .meta { left: 420px; top: 172px; }
+.controller.odyssey .meta { left: 422px; top: 197px; }

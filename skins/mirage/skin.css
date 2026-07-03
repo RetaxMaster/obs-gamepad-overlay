@@ -62,7 +62,7 @@
 /*
  * The guide (Xbox) button is a positioned glow, not a full-canvas sprite, so it
  * can't share the transform above (its box origin isn't the canvas origin).
- * Instead we drop its center through the same affine: valhalla center (450,217)
- * → (449,213), i.e. left/top of 420/184 for the 58px box.
+ * Instead it is placed on the guide button measured directly from body.png (the
+ * shared affine mispredicts it — the guide barely follows the body compression).
  */
-.controller.mirage .meta { left: 420px; top: 184px; }
+.controller.mirage .meta { left: 422px; top: 218px; }

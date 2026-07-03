@@ -88,6 +88,27 @@ window.SKINS = {
         type: "sprites",
         desc: "Assassin's Creed Odyssey body + the shared PNG sprite kit (_shared/sprites.css).",
     },
+    "black-ice": {
+        name: "Black Ice",
+        css: "skins/black-ice/skin.css",
+        root: "black-ice",
+        width: 900,
+        height: 800,
+        type: "sprites",
+        desc: "AC/DC Black Ice body + the shared PNG sprite kit (_shared/sprites.css).",
+    },
+    "72-seasons": {
+        // root is "seasons72" (not "72-seasons") because a CSS class selector
+        // cannot start with a digit — `.72-seasons` is invalid and would be
+        // dropped. The URL id / folder stay "72-seasons".
+        name: "72 Seasons",
+        css: "skins/72-seasons/skin.css",
+        root: "seasons72",
+        width: 900,
+        height: 800,
+        type: "sprites",
+        desc: "Metallica 72 Seasons body + the shared PNG sprite kit (_shared/sprites.css).",
+    },
 };
 
 // Loaded when ?skin= is missing or unknown.

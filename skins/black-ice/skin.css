@@ -1,0 +1,46 @@
+/*
+ * black-ice/skin.css — "Black Ice" (AC/DC · custom body + shared PNG sprites)
+ *
+ * Body is at valhalla dimensions (1346×1169) with the LT/RT trigger ears at
+ * valhalla positions, but the controller INTERIOR (sticks, d-pad, ABXY,
+ * view/menu, guide) is shifted up (the wells stay round — it's a position shift,
+ * not a size change). So each interior sprite gets a translate-only nudge to its
+ * measured well center — NO scale, or the round button glows would flatten into
+ * ellipses. Wells were read as the pure-black (0,0,0) holes in body.png; view
+ * and d-pad (no clean pure-black hole) are predicted from an affine fitted to
+ * the other seven. Triggers and bumpers stay at the default (already at valhalla
+ * up top). All art is mine, so this skin ships in the repo.
+ */
+@import url("../_shared/sprites.css");
+
+.controller.black-ice::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 900px;
+    height: 790px;
+    background: url(art/body.png) 0 0 / 900px 790px no-repeat;
+    filter: drop-shadow(0 16px 26px rgba(0, 0, 0, 0.45));
+    z-index: 0;
+}
+
+/* Stick wells measured from body.png, minus the 50px half-sprite. */
+.controller.black-ice .stick.left  { left: 161px; top: 275px; }
+.controller.black-ice .stick.right { left: 516px; top: 400px; }
+
+/* ABXY — per-button translate to the measured well (keeps the discs round). */
+.controller.black-ice .button.a { transform: translate(0.7px, -19.6px); }
+.controller.black-ice .button.b { transform: translate(-3.3px, -13.2px); }
+.controller.black-ice .button.x { transform: translate(4.3px, -13.8px); }
+.controller.black-ice .button.y { transform: translate(0.3px, -7.8px); }
+
+/* View / Menu — per-button translate (menu measured; view affine-predicted). */
+.controller.black-ice .back  { transform: translate(-6.9px, -14.0px); }
+.controller.black-ice .start { transform: translate(-2.3px, -16.2px); }
+
+/* D-pad — moves as a unit (affine-predicted). */
+.controller.black-ice .face { transform: translate(-8.1px, -27.6px); }
+
+/* Guide (Xbox) button — measured from the render. */
+.controller.black-ice .meta { left: 420px; top: 221px; }

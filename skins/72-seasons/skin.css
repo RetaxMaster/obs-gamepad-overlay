@@ -1,0 +1,55 @@
+/*
+ * 72-seasons/skin.css — "72 Seasons" (Metallica · custom body + shared PNG sprites)
+ *
+ * The root class is "seasons72" (NOT "72-seasons"): a CSS class selector can't
+ * start with a digit, so `.72-seasons` would be invalid and dropped. The URL id
+ * and folder stay "72-seasons".
+ *
+ * Body is mildly compressed; a single affine (fitted from six well
+ * correspondences, max residual ~1px) maps the shared valhalla-frame sprites
+ * onto its features; ABXY are pinned exactly per button. The LT/RT trigger ears
+ * were moved in body.png to the affine position. All art is mine → ships in repo.
+ */
+@import url("../_shared/sprites.css");
+
+.controller.seasons72::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 900px;
+    height: 790px;
+    background: url(art/body.png) 0 0 / 900px 790px no-repeat;
+    filter: drop-shadow(0 16px 26px rgba(0, 0, 0, 0.45));
+    z-index: 0;
+}
+
+/* Stick wells (measured from body.png), minus the 50px half-sprite. */
+.controller.seasons72 .stick.left  { left: 181px; top: 263px; }
+.controller.seasons72 .stick.right { left: 517px; top: 392px; }
+
+/* Structural sprites (bumpers, d-pad, view/menu, triggers) follow the body via
+   the fitted affine. */
+.controller.seasons72 .bumper,
+.controller.seasons72 .face,
+.controller.seasons72 .back,
+.controller.seasons72 .start,
+.controller.seasons72 .trigger {
+    transform-origin: 0 0;
+    transform: translate(17.91px, -1.16px) scale(0.9580, 0.9288);
+}
+
+/*
+ * ABXY aligned exactly per button (offset = measured well − shared-sprite center):
+ *   A well (675.1,371.5) − sprite (685.7,401.8) = (−10.6, −30.3)
+ *   B well (732.9,316.9) − sprite (746.2,341.3) = (−13.3, −24.4)
+ *   X well (616.8,313.2) − sprite (625.2,339.2) = (−8.4, −26.0)
+ *   Y well (675.2,258.7) − sprite (686.7,279.1) = (−11.5, −20.4)
+ */
+.controller.seasons72 .button.a { transform: translate(-10.6px, -30.3px); }
+.controller.seasons72 .button.b { transform: translate(-13.3px, -24.4px); }
+.controller.seasons72 .button.x { transform: translate(-8.4px, -26.0px); }
+.controller.seasons72 .button.y { transform: translate(-11.5px, -20.4px); }
+
+/* Guide (Xbox) button — placed on the logo measured from the render. */
+.controller.seasons72 .meta { left: 424px; top: 213px; }

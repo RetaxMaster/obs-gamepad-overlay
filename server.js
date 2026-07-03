@@ -33,10 +33,16 @@ app.get("/selector.html", (_req, res) => sendHtml(res, "selector.html"));
 
 // Static asset directories only. Anything outside these (server.js,
 // package.json, node_modules, docs, …) falls through to a 404.
+// Cache assets for an hour in production (helps the CDN); in local dev serve
+// them uncached so skin/CSS edits show up on a normal refresh (no stale cache).
+const IS_PROD = process.env.NODE_ENV === "production";
 const assetOptions = {
     dotfiles: "ignore",
     setHeaders(res) {
-        res.setHeader("Cache-Control", "public, max-age=3600");
+        res.setHeader(
+            "Cache-Control",
+            IS_PROD ? "public, max-age=3600" : "no-cache"
+        );
     },
 };
 for (const dir of ["skins", "src", "styles"]) {

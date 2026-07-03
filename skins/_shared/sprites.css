@@ -103,8 +103,8 @@
 
 /* ── Guide / Xbox button — lit in the base body; soft glow on press ────────── */
 .controller .meta {
-    left: 421px;
-    top: 188px;
+    left: 425px;
+    top: 221px;
     width: 58px;
     height: 58px;
     border-radius: 50%;
