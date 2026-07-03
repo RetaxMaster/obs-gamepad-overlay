@@ -95,8 +95,8 @@
     transform: translate(calc(var(--x, 0) * 22px), calc(var(--y, 0) * 22px));
     transition: transform 0.04s linear, filter 0.05s ease;
 }
-.controller .stick.left  { left: 170px; top: 284px; }
-.controller .stick.right { left: 519px; top: 419px; }
+.controller .stick.left  { left: 173px; top: 296px; }
+.controller .stick.right { left: 523px; top: 431px; }
 .controller .stick.pressed {
     filter: brightness(1.25) drop-shadow(0 0 8px rgba(255, 255, 255, 0.55));
 }
